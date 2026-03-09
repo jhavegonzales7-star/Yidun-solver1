@@ -27,6 +27,52 @@ warnings.filterwarnings("ignore", message=".*SIFT_create.*deprecated.*")
 
 DEBUG = False
 
+"""
+Yidun Proxyless Solver - Railway Optimized Version
+Add this at the top of your existing file
+"""
+
+import os
+import sys
+import gc
+
+# ============================================
+# RAILWAY OPTIMIZATIONS - ADD THIS AT THE TOP
+# ============================================
+
+# Detect Railway environment
+IS_RAILWAY = 'RAILWAY_ENVIRONMENT' in os.environ or 'RAILWAY_STATIC_URL' in os.environ
+
+if IS_RAILWAY:
+    print("🛤️ Running on Railway - applying memory optimizations")
+    
+    # Force CPU only
+    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+    os.environ['OMP_NUM_THREADS'] = '1'
+    os.environ['MKL_NUM_THREADS'] = '1'
+    
+    # Set memory limits
+    import torch
+    torch.set_num_threads(1)
+    torch.set_grad_enabled(False)
+    
+    # Limit OpenCV threads
+    try:
+        import cv2
+        cv2.setNumThreads(1)
+    except:
+        pass
+    
+    # Use /tmp for outputs
+    TOKEN_OUTPUT_FILE = '/tmp/validated_tokens.txt'
+else:
+    TOKEN_OUTPUT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'validated_tokens.txt')
+
+# ============================================
+# REST OF YOUR EXISTING yidun_proxyless.py CODE GOES HERE
+# ============================================
+# [PASTE YOUR ENTIRE yidun_proxyless.py CODE HERE]
+
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 USE_CUDA = True if torch.cuda.is_available() else False
 DEVICE = 'cuda' if USE_CUDA else 'cpu'
