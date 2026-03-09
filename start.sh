@@ -1,9 +1,11 @@
 
-echo " Starting Yidun Solver"
+#!/bin/bash
+echo "🚀 Starting Yidun Solver on Railway"
 echo "==================================="
 echo "PORT: $PORT"
 echo "Python: $(python --version)"
 echo "Memory: $(free -h | grep Mem | awk '{print $2}')"
 echo "==================================="
 
-python app.py --host 0.0.0.0 --port $PORT --threads 1
+# Start the server
+hypercorn app:app --bind 0.0.0.0:$PORT --workers 1
