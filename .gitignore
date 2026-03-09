@@ -19,3 +19,4 @@ Thumbs.db
 # Temp
 /tmp/
 *.tmp
+validated_tokens.txt
